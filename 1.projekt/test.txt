@@ -1,0 +1,1 @@
+slovo slovo 88 13 "\0" slovo[5] 0xff
