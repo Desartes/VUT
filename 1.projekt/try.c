@@ -84,7 +84,7 @@ int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 	int i = 0;
 
 	while( *(c + i) != '\0' ){ // Iterácia ktorá prejde celým reťazcom a vyhodnotí či je reťazec vo formáte dátumu DDDD-DD-DD
-		if ( (*(c + i) >= 48 && *(c + i) <= 57) && (i != 4) && (i != 7) ) // D je číslo a zároveň nie sme na indexe 4 ani 7
+		if ( (*(c + i) >= 48 && *(c + i) <= 57) && (i != 4) && (i != 7) && (i < 10)) // D je číslo a zároveň nie sme na indexe 4 ani 7
 			i++;
 		else 
 			if ( (i == 4 && (*(c + i) == '-')) || (i == 7 && (*(c + i) == '-')) ) // ak sme na indexe 4 alebo 7, znak je '-'
@@ -92,7 +92,7 @@ int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 			else 
 				break;
 	}
-	if ( *(c + i) == '\0' ) // Pokiaľ sme cyklom prešli až do ukončujúceho znaku v reťazci, reťazec je vo formáte pre dátum
+	if ( *(c + i) == '\0' && i == 10) // Pokiaľ sme cyklom prešli až do ukončujúceho znaku v reťazci, reťazec je vo formáte pre dátum
 		return 1; 
 	else // reťazec nie je vo formáte pre dátum
 		return 0; 
