@@ -7,18 +7,20 @@
  ------------------------*/
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 int palindrom(char *a);
 int isnum(char *c);
+int istext(char *c);
 int isdate(char *c);
-char *datum(int d, int m, int y); 
-int prime(int i);
+char *datum(int d, int m, int y);
+// int prime(int i);
 
 int main() /* ---------------- HLAVNÉ TELO PROGRAMU ---------------- */
 {
 	char slovo[100];
 
-	while(scanf("%100s", slovo) == 1) {
+	while( scanf("%100s", slovo) == 1 && istext(&slovo[0]) ) {
 		if ( palindrom(&slovo[0]) && !isnum(&slovo[0]) )
 			printf("word: %s (palindrome)\n", slovo);
 		else if (isnum(&slovo[0]))
@@ -26,10 +28,16 @@ int main() /* ---------------- HLAVNÉ TELO PROGRAMU ---------------- */
 		else if (isdate(&slovo[0])) {
 			int day, month, year;
 			sscanf(slovo, "%4d-%2d-%2d",&year, &month, &day);
-			printf("date: %.3s %s\n", datum(day, month, year), slovo);
+			if ( (month <= 12) && (month >= 1) && (day <= 31) && (day >= 1) ){
+				printf("date: %.3s %s\n", datum(day, month, year), slovo);
+			} else
+				printf("word: %s\n", slovo);
 		}
 		else
 			printf("word: %s\n", slovo);
+	}
+	if (!istext(&slovo[0])) {
+		printf("Fatal error, zly vstup !\n");
 	}
 	
 	return 0; 
@@ -80,6 +88,20 @@ int isnum(char *c) { /* ---- Funkcia zisťujúca či je reťazec číslo ---- */
 	else // Reťazec nie je číslo
 		return 0;
 }
+int istext(char *c) { /* ---- Funkcia zisťujúca či je reťazec složený iba z "tisknutelných" znakov ASCII tabulky ---- */
+	int i = 0;
+	
+	while( *(c + i) != '\0' ){ 
+		if ( !(*(c + i) > 32 && *(c + i) < 127) ) // rozsah tisknutelných znakov ASCII 33 - 126
+			break; 
+		else 
+			i++; 
+	}
+	if ( *(c + i) == '\0' ) // Pokiaľ som na konci slova bez erroru, reťazec je z povolených hodnôt ASCII
+		return 1; 
+	else // Reťazec nie je z tisknutelných znakov
+		return 0;
+}
 int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 	int i = 0;
 
@@ -99,24 +121,26 @@ int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 }
 char *datum(int d, int m, int y) {
 
-	struct tm time_str;
-	static char daybuf[20];
+	struct tm date;
+	static char datebuff[20];
 
-	time_str.tm_year = y - 1900;
-	time_str.tm_mon = m - 1;
-	time_str.tm_mday = d;
-	time_str.tm_hour = 0;
-	time_str.tm_min = 0;
-	time_str.tm_sec = 1;
-	time_str.tm_isdst = -1;
-	if (mktime(&time_str) == -1)
-		return NULL;
+	date.tm_year = y - 1900;
+	date.tm_mon = m - 1;
+	date.tm_mday = d;
+	date.tm_hour = 0;
+	date.tm_min = 0;
+	date.tm_sec = 1;
+	date.tm_isdst = -1;
+	if (mktime(&date) == -1){
+		printf("Making time using mktime() failed.\nExiting program ..\n");
+		exit(1);
+	}
 	else {
-		strftime(daybuf, sizeof(daybuf), "%A", &time_str);
+		strftime(datebuff, sizeof(datebuff), "%A", &date);
 		// printf("%d / %d / %d\n", y,m,d); // debug
-		return daybuf;
+		return datebuff;
 	}
 }
-int prime(int i){
+// int prime(int i){
 	
-}
+// }
