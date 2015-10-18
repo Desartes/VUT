@@ -3,29 +3,37 @@
  * @author: Filip Kolesár - xkoles06
  			1BIT, VUT FIT
  * @date: 10/2015
- * @version: 0.6 beta     
+ * @version: 1.0.0     
  ------------------------*/
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <limits.h>
 
-int palindrom(char *a);
+int strlength(char *c);
+int ispalindrom(char *a);
 int isnum(char *c);
+int isprime(int i);
 int istext(char *c);
 int isdate(char *c);
 char *datum(int d, int m, int y);
-// int prime(int i);
 
 int main() /* ---------------- HLAVNÉ TELO PROGRAMU ---------------- */
 {
 	char slovo[100];
 
 	while( scanf("%100s", slovo) == 1 && istext(&slovo[0]) ) {
-		if ( palindrom(&slovo[0]) && !isnum(&slovo[0]) )
+		if ( ispalindrom(&slovo[0]) && !isnum(&slovo[0]) )
 			printf("word: %s (palindrome)\n", slovo);
-		else if (isnum(&slovo[0]))
-			printf("number: %s\n", slovo);
-		else if (isdate(&slovo[0])) {
+		else 
+			if (isnum(&slovo[0])){
+				if ( strlength(&slovo[0]) < 11 && atol(slovo) <= INT_MAX && isprime(atol(slovo)) ){
+					printf("number: %s (prime)\n", slovo);
+				} else
+					printf("number: %s\n", slovo);
+			}
+		else 
+			if (isdate(&slovo[0])) {
 			int day, month, year;
 			sscanf(slovo, "%4d-%2d-%2d",&year, &month, &day);
 			if ( (month <= 12) && (month >= 1) && (day <= 31) && (day >= 1) ){
@@ -37,29 +45,33 @@ int main() /* ---------------- HLAVNÉ TELO PROGRAMU ---------------- */
 			printf("word: %s\n", slovo);
 	}
 	if (!istext(&slovo[0])) {
-		printf("Fatal error, zly vstup !\n");
+		printf("Chybný vstup !\n");
 	}
-	
+	//printf("%d\n", strlength(&slovo[0]));
 	return 0; 
 }
 
-int palindrom(char *a) { /* ---- Funkcia zistujúca palindrom ---- */
-	
+int strlength(char *c) { // Zistenie dĺžky slova
 	int offset = 0,
 		count = 0;
-		char new[100];
-
-	for (int i = 0; i < 100; ++i){ // Resetovanie obsahu reťazca
-		new[i] = 0;
-	}
-
-	while( *(a + offset) != '\0') { // Zistenie dĺžky slova
+	while( *(c + offset) != '\0') { 
 		++offset;
 		++count;
 	}
-	for (int i = 0; i < count; ++i) { // Otáčanie slova pre následné porovnanie
-		//printf("%c", *(a+(count - i - 1)) );
-		new[i] = *(a+(count - i - 1));
+	return count;
+}
+
+int ispalindrom(char *a) { /* ---- Funkcia zistujúca palindrom ---- */
+	char new[100];
+	int dlzkaslova = strlength(a);
+
+	for (int i = 0; i <= 100; ++i){ // Resetovanie obsahu reťazca
+		new[i] = 0;
+	}
+
+	for (int i = 0; i < dlzkaslova; ++i) { // Otáčanie slova pre následné porovnanie
+		//printf("%c", *(a+(dlzkaslova - i - 1)) );
+		new[i] = *(a+(dlzkaslova - i - 1));
 	}
 
 	int loop = 0; // Pomocná premenná
@@ -74,6 +86,7 @@ int palindrom(char *a) { /* ---- Funkcia zistujúca palindrom ---- */
 		return 0;
 	//	printf("%s | %s\n", a, new); // Debug mode
 }
+
 int isnum(char *c) { /* ---- Funkcia zisťujúca či je reťazec číslo ---- */
 	int i = 0;
 	
@@ -88,6 +101,7 @@ int isnum(char *c) { /* ---- Funkcia zisťujúca či je reťazec číslo ---- */
 	else // Reťazec nie je číslo
 		return 0;
 }
+
 int istext(char *c) { /* ---- Funkcia zisťujúca či je reťazec složený iba z "tisknutelných" znakov ASCII tabulky ---- */
 	int i = 0;
 	
@@ -102,6 +116,7 @@ int istext(char *c) { /* ---- Funkcia zisťujúca či je reťazec složený iba 
 	else // Reťazec nie je z tisknutelných znakov
 		return 0;
 }
+
 int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 	int i = 0;
 
@@ -119,6 +134,7 @@ int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 	else // reťazec nie je vo formáte pre dátum
 		return 0; 
 }
+
 char *datum(int d, int m, int y) {
 
 	struct tm date;
@@ -141,6 +157,15 @@ char *datum(int d, int m, int y) {
 		return datebuff;
 	}
 }
-// int prime(int i){
-	
-// }
+
+int isprime(int n){
+	int i = 2;
+	while( n%i != 0 && i<=n ) {
+		i++;
+	}
+	if (i == n)
+	{
+		return 1;
+	} else
+		return 0;
+}
