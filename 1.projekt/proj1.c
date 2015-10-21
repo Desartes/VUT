@@ -1,4 +1,4 @@
-/* -----------------------------------
+/* ----------------------------------
  * @file_name: proj1.c    
  * @author: Filip Kolesár - xkoles06
  *			1BIT, VUT FIT
@@ -9,6 +9,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <ctype.h>
 
 int strlength(char *c);
 int ispalindrom(char *c);
@@ -20,7 +21,7 @@ char *datum(int d, int m, int y);
 
 int main(int argc, char *argv[]) /* ---------------- HLAVNÉ TELO PROGRAMU ---------------- */
 {
-	if (argc > 1 ) {
+	if (argc > 1 ) { // pri neprazdnom argumente program vypise svoj kratky popis a skonci
 		printf("%s is a text parsing program\n"
 			   "        which gets text from standard input\n\n"
 			   "usage:   <command> < <filename>\n"
@@ -34,7 +35,7 @@ int main(int argc, char *argv[]) /* ---------------- HLAVNÉ TELO PROGRAMU -----
 		if ( ispalindrom(&slovo[0]) && !isnum(&slovo[0]) )
 			printf("word: %s (palindrome)\n", slovo);
 		else 
-			if (isnum(&slovo[0])){
+			if (isnum(&slovo[0])) {
 				if ( strlength(&slovo[0]) < 11 && atol(slovo) <= INT_MAX && isprime(atol(slovo)) )
 					printf("number: %s (prime)\n", slovo);
 				else
@@ -42,7 +43,7 @@ int main(int argc, char *argv[]) /* ---------------- HLAVNÉ TELO PROGRAMU -----
 			}
 		else 
 			if (isdate(&slovo[0])) {
-			int day, month, year;
+				int day, month, year;
 			sscanf(slovo, "%4d-%2d-%2d",&year, &month, &day);
 			if ( (month <= 12) && (month >= 1) && (day <= 31) && (day >= 1) )
 				printf("date: %.3s %s\n", datum(day, month, year), slovo);
@@ -81,7 +82,7 @@ int ispalindrom(char *c) { /* ---- Funkcia zistujúca palindrom ---- */
 	}
 
 	int loop = 0; // Pomocná premenná
-	while( *(c + loop) == new[loop] ){ // Porovnávanie dvoch reťazcov (po znakoch)
+	while( *(c + loop) == new[loop] ) { // Porovnávanie dvoch reťazcov (po znakoch)
 		if ( *(c + loop) == '\0' || new[loop] == '\0' ) // Ak sme na konci niektorého z reťazcov, vyskoč z cyklu
 			break;
 		loop++; // Ďalší znak v reťazci
@@ -96,7 +97,7 @@ int ispalindrom(char *c) { /* ---- Funkcia zistujúca palindrom ---- */
 int isnum(char *c) { /* ---- Funkcia zisťujúca či je reťazec číslo ---- */
 	int i = 0;
 	
-	while( *(c + i) != '\0' ){ // Iterácia ktorá prejde celým reťazcom a vyhodnotí či je reťazec číslo
+	while( *(c + i) != '\0' ) { // Iterácia ktorá prejde celým reťazcom a vyhodnotí či je reťazec číslo
 		if ( !(*(c + i) >= 48 && *(c + i) <= 57) )
 			break; // Ak znak v reťazci nie je číslo, vyskoč z cyklu
 		else 
@@ -111,22 +112,22 @@ int isnum(char *c) { /* ---- Funkcia zisťujúca či je reťazec číslo ---- */
 int istext(char *c) { /* ---- Funkcia zisťujúca či je reťazec složený iba z "tisknutelných" znakov ASCII tabulky ---- */
 	int i = 0;
 	
-	while( *(c + i) != '\0' ){ 
-		if ( !(*(c + i) > 32 && *(c + i) < 127) ) // rozsah tisknutelných znakov ASCII 33 - 126
+	while( *(c + i) != '\0' ) { 
+		if ( !isprint(*(c + i)) ) // rozsah tisknutelných znakov ASCII 33 - 126
 			break; 
 		else 
 			i++; 
 	}
-	if ( *(c + i) == '\0' ) // Pokiaľ som na konci slova bez erroru, reťazec je z povolených hodnôt ASCII
+	if ( *(c + i) == '\0' ) // Pokiaľ som na konci slova bez erroru, reťazec je z tisknutelnych znakov
 		return 1; 
-	else // Reťazec nie je z tisknutelných znakov
+	else // Retazec nie je z tisknutelnych znakov
 		return 0;
 }
 
 int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 	int i = 0;
 
-	while( *(c + i) != '\0' ){ // Iterácia ktorá prejde celým reťazcom a vyhodnotí či je reťazec vo formáte dátumu DDDD-DD-DD
+	while( *(c + i) != '\0' ) { // Iterácia ktorá prejde celým reťazcom a vyhodnotí či je reťazec vo formáte dátumu DDDD-DD-DD
 		if ( (*(c + i) >= 48 && *(c + i) <= 57) && (i != 4) && (i != 7) && (i < 10)) // D je číslo a zároveň nie sme na indexe 4 ani 7
 			i++;
 		else 
@@ -152,7 +153,7 @@ char *datum(int d, int m, int y) {
 	date.tm_min = 0;
 	date.tm_sec = 1;
 	date.tm_isdst = -1;
-	if (mktime(&date) == -1){
+	if (mktime(&date) == -1) {
 		printf("Making time using mktime() failed.\nExiting program ..\n");
 		exit(1);
 	}
@@ -163,9 +164,9 @@ char *datum(int d, int m, int y) {
 	}
 }
 
-int isprime(int n){
+int isprime(int n) {
 	int i = 2;
-	while( n%i != 0 && i<=n )
+	while( n%i != 0 && i <= n )
 		i++;
 	if (i == n)
 		return 1;
