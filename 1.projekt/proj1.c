@@ -21,7 +21,7 @@ char *date(int d, int m, int y);
 
 int main(int argc, char *argv[]) /* ---------------- MAIN BODY ---------------- */
 {
-	if (argc > 1 ) { // pri neprazdnom argumente program vypise svoj kratky popis a skonci
+	if (argc > 1) { // pri neprazdnom argumente program vypise svoj kratky popis a skonci
 		printf("%s is a text parsing program\n"
 			   "        which gets text from standard input\n\n"
 			   "usage:   <command> < <filename>\n"
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) /* ---------------- MAIN BODY ---------------- 
 
 int strlength(char *c) { // Zistenie dĺžky slova
 	int offset = 0;
-	while( *(c + offset) != '\0') 
+	while( *(c + offset) != '\0' ) 
 		++offset;
 	return offset;
 }
@@ -85,7 +85,7 @@ int ispalindrom(char *c) { /* ---- Funkcia zistujúca palindrom ---- */
 			break;
 		offset++; // Ďalší znak v reťazci
 	}
-	if (*(c + offset) == '\0' && new[offset] == '\0' ) // Pokiaľ sme prišli ku koncu oboch reťazcov naraz, reťazce sa zhodujú
+	if ( *(c + offset) == '\0' && new[offset] == '\0' ) // Pokiaľ sme prišli ku koncu oboch reťazcov naraz, reťazce sa zhodujú
 		return 1;
 	else // Reťazce sa nehodujú
 		return 0;
@@ -134,7 +134,7 @@ int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 			else 
 				break;
 	}
-	if ( *(c + i) == '\0' && i == 10) // Pokiaľ sme cyklom prešli až do ukončujúceho znaku v reťazci, reťazec je vo formáte pre dátum
+	if ( *(c + i) == '\0' && i == 10 ) // Pokiaľ sme cyklom prešli až do ukončujúceho znaku v reťazci, reťazec je vo formáte pre dátum
 		return 1; 
 	else // reťazec nie je vo formáte pre dátum
 		return 0; 
@@ -142,7 +142,7 @@ int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 
 char *date(int d, int m, int y) {
 	struct tm date;
-	static char datebuff[20];
+	static char datebuff[10];
 
 	date.tm_year = y - 1900;
 	date.tm_mon = m - 1;
