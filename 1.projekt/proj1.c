@@ -54,7 +54,8 @@ int main(int argc, char *argv[]) /* ---------------- MAIN BODY ---------------- 
 			printf("word: %s\n", word);
 	}
 	if (!istext(&word[0]))
-		printf("Chybný vstup !\n");
+		printf("The characters you\'ve entered are not printable.\n"
+			   "Exiting ..\n");
 	//printf("%d\n", strlength(&word[0])); // debug
 	return 0; 
 }
@@ -67,7 +68,7 @@ int strlength(char *c) { // Zistenie dĺžky slova
 }
 
 int ispalindrom(char *c) { /* ---- Funkcia zistujúca palindrom ---- */
-	char new[100];
+	char new[101];
 	int wordlen = strlength(c);
 
 	for (int i = 0; i <= 100; ++i) // Resetovanie obsahu reťazca
@@ -78,17 +79,17 @@ int ispalindrom(char *c) { /* ---- Funkcia zistujúca palindrom ---- */
 		new[i] = *(c+(wordlen - i - 1));
 	}
 
-	int loop = 0; // Pomocná premenná
-	while( *(c + loop) == new[loop] ) { // Porovnávanie dvoch reťazcov (po znakoch)
-		if ( *(c + loop) == '\0' || new[loop] == '\0' ) // Ak sme na konci niektorého z reťazcov, vyskoč z cyklu
+	int offset = 0; // Pomocná premenná
+	while( *(c + offset) == new[offset] ) { // Porovnávanie dvoch reťazcov (po znakoch)
+		if ( *(c + offset) == '\0' || new[offset] == '\0' ) // Ak sme na konci niektorého z reťazcov, vyskoč z cyklu
 			break;
-		loop++; // Ďalší znak v reťazci
+		offset++; // Ďalší znak v reťazci
 	}
-	if (*(c + loop) == '\0' && new[loop] == '\0' ) // Pokiaľ sme prišli ku koncu oboch reťazcov naraz, reťazce sa zhodujú
+	if (*(c + offset) == '\0' && new[offset] == '\0' ) // Pokiaľ sme prišli ku koncu oboch reťazcov naraz, reťazce sa zhodujú
 		return 1;
 	else // Reťazce sa nehodujú
 		return 0;
-	//	printf("%s | %s\n", c, new); // Debug mode
+	// printf("%s | %s\n", c, new); // Debug mode
 }
 
 int isnum(char *c) { /* ---- Funkcia zisťujúca či je reťazec číslo ---- */
