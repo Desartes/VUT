@@ -17,9 +17,9 @@ int isnum(char *c);
 int isprime(int i);
 int istext(char *c);
 int isdate(char *c);
-char *datum(int d, int m, int y);
+char *date(int d, int m, int y);
 
-int main(int argc, char *argv[]) /* ---------------- HLAVNÉ TELO PROGRAMU ---------------- */
+int main(int argc, char *argv[]) /* ---------------- MAIN BODY ---------------- */
 {
 	if (argc > 1 ) { // pri neprazdnom argumente program vypise svoj kratky popis a skonci
 		printf("%s is a text parsing program\n"
@@ -29,56 +29,53 @@ int main(int argc, char *argv[]) /* ---------------- HLAVNÉ TELO PROGRAMU -----
 	return 0;
 	} 
 
-	char slovo[101];
+	char word[101];
 
-	while( scanf("%100s", slovo) == 1 && istext(&slovo[0]) ) {
-		if ( ispalindrom(&slovo[0]) && !isnum(&slovo[0]) )
-			printf("word: %s (palindrome)\n", slovo);
+	while( scanf("%100s", word) == 1 && istext(&word[0]) ) {
+		if ( ispalindrom(&word[0]) && !isnum(&word[0]) )
+			printf("word: %s (palindrome)\n", word);
 		else 
-			if (isnum(&slovo[0])) {
-				if ( strlength(&slovo[0]) < 11 && atol(slovo) <= INT_MAX && isprime(atol(slovo)) )
-					printf("number: %s (prime)\n", slovo);
+			if (isnum(&word[0])) {
+				if ( strlength(&word[0]) < 11 && atol(word) <= INT_MAX && isprime(atol(word)) )
+					printf("number: %s (prime)\n", word);
 				else
-					printf("number: %s\n", slovo);
+					printf("number: %s\n", word);
 			}
 		else 
-			if (isdate(&slovo[0])) {
+			if (isdate(&word[0])) {
 				int day, month, year;
-			sscanf(slovo, "%4d-%2d-%2d",&year, &month, &day);
+			sscanf(word, "%4d-%2d-%2d",&year, &month, &day);
 			if ( (month <= 12) && (month >= 1) && (day <= 31) && (day >= 1) )
-				printf("date: %.3s %s\n", datum(day, month, year), slovo);
+				printf("date: %.3s %s\n", date(day, month, year), word);
 			else
-				printf("word: %s\n", slovo);
+				printf("word: %s\n", word);
 		}
 		else
-			printf("word: %s\n", slovo);
+			printf("word: %s\n", word);
 	}
-	if (!istext(&slovo[0]))
+	if (!istext(&word[0]))
 		printf("Chybný vstup !\n");
-	//printf("%d\n", strlength(&slovo[0])); // debug
+	//printf("%d\n", strlength(&word[0])); // debug
 	return 0; 
 }
 
 int strlength(char *c) { // Zistenie dĺžky slova
-	int offset = 0,
-		count = 0;
-	while( *(c + offset) != '\0') { 
+	int offset = 0;
+	while( *(c + offset) != '\0') 
 		++offset;
-		++count;
-	}
-	return count;
+	return offset;
 }
 
 int ispalindrom(char *c) { /* ---- Funkcia zistujúca palindrom ---- */
 	char new[100];
-	int dlzkaslova = strlength(c);
+	int wordlen = strlength(c);
 
 	for (int i = 0; i <= 100; ++i) // Resetovanie obsahu reťazca
 		new[i] = 0;
 
-	for (int i = 0; i < dlzkaslova; ++i) { // Otáčanie slova pre následné porovnanie
-		//printf("%c", *(c+(dlzkaslova - i - 1)) ); // debug
-		new[i] = *(c+(dlzkaslova - i - 1));
+	for (int i = 0; i < wordlen; ++i) { // Otáčanie slova pre následné porovnanie
+		//printf("%c", *(c+(wordlen - i - 1)) ); // debug
+		new[i] = *(c+(wordlen - i - 1));
 	}
 
 	int loop = 0; // Pomocná premenná
@@ -142,7 +139,7 @@ int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 		return 0; 
 }
 
-char *datum(int d, int m, int y) {
+char *date(int d, int m, int y) {
 	struct tm date;
 	static char datebuff[20];
 
