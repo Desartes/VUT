@@ -1,26 +1,34 @@
-/* -----------------------
+/* -----------------------------------
  * @file_name: proj1.c    
  * @author: Filip Kolesár - xkoles06
- 			1BIT, VUT FIT
+ *			1BIT, VUT FIT
  * @date: 10/2015
  * @version: 1.0.0     
- ------------------------*/
+ -----------------------------------*/
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <limits.h>
 
 int strlength(char *c);
-int ispalindrom(char *a);
+int ispalindrom(char *c);
 int isnum(char *c);
 int isprime(int i);
 int istext(char *c);
 int isdate(char *c);
 char *datum(int d, int m, int y);
 
-int main() /* ---------------- HLAVNÉ TELO PROGRAMU ---------------- */
+int main(int argc, char *argv[]) /* ---------------- HLAVNÉ TELO PROGRAMU ---------------- */
 {
-	char slovo[100];
+	if (argc > 1 ) {
+		printf("%s is a text parsing program\n"
+			   "        which gets text from standard input\n\n"
+			   "usage:   <command> < <filename>\n"
+			   "example: ./proj1 < data.txt\n", argv[0]);
+	return 0;
+	} 
+
+	char slovo[101];
 
 	while( scanf("%100s", slovo) == 1 && istext(&slovo[0]) ) {
 		if ( ispalindrom(&slovo[0]) && !isnum(&slovo[0]) )
@@ -60,29 +68,29 @@ int strlength(char *c) { // Zistenie dĺžky slova
 	return count;
 }
 
-int ispalindrom(char *a) { /* ---- Funkcia zistujúca palindrom ---- */
+int ispalindrom(char *c) { /* ---- Funkcia zistujúca palindrom ---- */
 	char new[100];
-	int dlzkaslova = strlength(a);
+	int dlzkaslova = strlength(c);
 
 	for (int i = 0; i <= 100; ++i) // Resetovanie obsahu reťazca
 		new[i] = 0;
 
 	for (int i = 0; i < dlzkaslova; ++i) { // Otáčanie slova pre následné porovnanie
-		//printf("%c", *(a+(dlzkaslova - i - 1)) ); // debug
-		new[i] = *(a+(dlzkaslova - i - 1));
+		//printf("%c", *(c+(dlzkaslova - i - 1)) ); // debug
+		new[i] = *(c+(dlzkaslova - i - 1));
 	}
 
 	int loop = 0; // Pomocná premenná
-	while( *(a + loop) == new[loop] ){ // Porovnávanie dvoch reťazcov (po znakoch)
-		if ( *(a + loop) == '\0' || new[loop] == '\0' ) // Ak sme na konci niektorého z reťazcov, vyskoč z cyklu
+	while( *(c + loop) == new[loop] ){ // Porovnávanie dvoch reťazcov (po znakoch)
+		if ( *(c + loop) == '\0' || new[loop] == '\0' ) // Ak sme na konci niektorého z reťazcov, vyskoč z cyklu
 			break;
 		loop++; // Ďalší znak v reťazci
 	}
-	if (*(a + loop) == '\0' && new[loop] == '\0' ) // Pokiaľ sme prišli ku koncu oboch reťazcov naraz, reťazce sa zhodujú
+	if (*(c + loop) == '\0' && new[loop] == '\0' ) // Pokiaľ sme prišli ku koncu oboch reťazcov naraz, reťazce sa zhodujú
 		return 1;
 	else // Reťazce sa nehodujú
 		return 0;
-	//	printf("%s | %s\n", a, new); // Debug mode
+	//	printf("%s | %s\n", c, new); // Debug mode
 }
 
 int isnum(char *c) { /* ---- Funkcia zisťujúca či je reťazec číslo ---- */
