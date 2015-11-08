@@ -63,73 +63,73 @@ int main(int argc, char *argv[]) /* ---------------- MAIN BODY ---------------- 
 	return 0; 
 }
 
-int strlength(char *c) { // Zistenie dĺžky slova
+int strlength(char *c) { // Zistenie dlzky slova
 	int offset = 0;
 	while( *(c + offset) != '\0' ) 
 		++offset;
 	return offset;
 }
 
-int ispalindrom(char *c) { /* ---- Funkcia zistujúca palindrom ---- */
+int ispalindrom(char *c) { /* ---- Funkcia zistujuca palindrom ---- */
 	char new[101];
 	int wordlen = strlength(c);
 
-	for (int i = 0; i <= 100; ++i) // Resetovanie obsahu reťazca
+	for (int i = 0; i <= 100; ++i) // Resetovanie obsahu retazca
 		new[i] = 0;
 
-	for (int i = 0; i < wordlen; ++i) { // Otáčanie slova pre následné porovnanie
+	for (int i = 0; i < wordlen; ++i) { // Otacanie slova pre nasledne porovnanie
 		//printf("%c", *(c+(wordlen - i - 1)) ); // debug
 		new[i] = *(c+(wordlen - i - 1));
 	}
 
-	int offset = 0; // Pomocná premenná
-	while( *(c + offset) == new[offset] ) { // Porovnávanie dvoch reťazcov (po znakoch)
-		if ( *(c + offset) == '\0' || new[offset] == '\0' ) // Ak sme na konci niektorého z reťazcov, vyskoč z cyklu
+	int offset = 0; // Pomocna premenna
+	while( *(c + offset) == new[offset] ) { // Porovnavanie dvoch retazcov (po znakoch)
+		if ( *(c + offset) == '\0' || new[offset] == '\0' ) // Ak sme na konci niektorého z retazcov, vyskoč z cyklu
 			break;
-		offset++; // Ďalší znak v reťazci
+		offset++; // Dalsi znak v retazci
 	}
-	if ( *(c + offset) == '\0' && new[offset] == '\0' ) // Pokiaľ sme prišli ku koncu oboch reťazcov naraz, reťazce sa zhodujú
+	if ( *(c + offset) == '\0' && new[offset] == '\0' ) // Pokial sme prisli ku koncu oboch retazcov naraz, retazce sa zhoduju
 		return 1;
-	else // Reťazce sa nehodujú
+	else // Reťazce sa nehoduju
 		return 0;
 	// printf("%s | %s\n", c, new); // Debug mode
 }
 
-int isnum(char *c) { /* ---- Funkcia zisťujúca či je reťazec číslo ---- */
+int isnum(char *c) { /* ---- Funkcia zistujuca ci je retazec číslo ---- */
 	int i = 0;
 	
-	while( *(c + i) != '\0' ) { // Iterácia ktorá prejde celým reťazcom a vyhodnotí či je reťazec číslo
+	while( *(c + i) != '\0' ) { // Iteracia ktora prejde celym retazcom a vyhodnoti či je retazec cislo
 		if ( !(*(c + i) >= 48 && *(c + i) <= 57) )
-			break; // Ak znak v reťazci nie je číslo, vyskoč z cyklu
+			break; // Ak znak v retazci nie je cislo, vyskoc z cyklu
 		else 
-			i++; // Nasledujúci znak v reťazci
+			i++; // Nasledujuci znak v retazci
 	}
-	if ( *(c + i) == '\0' ) // Pokiaľ som cyklom prešiel až do ukončujúceho znaku v reťazci reťazec je číslo
+	if ( *(c + i) == '\0' ) // Pokial som cyklom presiel až do ukoncujuceho znaku v retazci retazec je cislo
 		return 1; 
-	else // Reťazec nie je číslo
+	else // Retazec nie je cislo
 		return 0;
 }
 
-int istext(char *c) { /* ---- Funkcia zisťujúca či je reťazec složený iba z "tisknutelných" znakov ASCII tabulky ---- */
+int istext(char *c) { /* ---- Funkcia zistujuca či je reťazec slozeny iba z "tisknutelnych" znakov ASCII tabulky ---- */
 	int i = 0;
 	
 	while( *(c + i) != '\0' ) { 
-		if ( !isprint(*(c + i)) ) // rozsah tisknutelných znakov ASCII 33 - 126
+		if ( !isprint(*(c + i)) ) // rozsah tisknutelnych znakov ASCII
 			break; 
 		else 
 			i++; 
 	}
-	if ( *(c + i) == '\0' ) // Pokiaľ som na konci slova bez erroru, reťazec je z tisknutelnych znakov
+	if ( *(c + i) == '\0' ) // Pokial som na konci slova bez erroru, retazec je z tisknutelnych znakov
 		return 1; 
 	else // Retazec nie je z tisknutelnych znakov
 		return 0;
 }
 
-int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
+int isdate(char *c) { /* ---- Funkcia zistujúca ci je retazec datum ---- */
 	int i = 0;
 
-	while( *(c + i) != '\0' ) { // Iterácia ktorá prejde celým reťazcom a vyhodnotí či je reťazec vo formáte dátumu DDDD-DD-DD
-		if ( (*(c + i) >= 48 && *(c + i) <= 57) && (i != 4) && (i != 7) && (i < 10)) // D je číslo a zároveň nie sme na indexe 4 ani 7
+	while( *(c + i) != '\0' ) { // Iteracia ktora prejde celým reťazcom a vyhodnoti ci je retazec vo formate datumu DDDD-DD-DD
+		if ( (*(c + i) >= 48 && *(c + i) <= 57) && (i != 4) && (i != 7) && (i < 10)) // D je cislo a zaroveň nie sme na indexe 4 ani 7
 			i++;
 		else 
 			if ( (i == 4 && (*(c + i) == '-')) || (i == 7 && (*(c + i) == '-')) ) // ak sme na indexe 4 alebo 7, znak je '-'
@@ -137,13 +137,13 @@ int isdate(char *c) { /* ---- Funkcia zisťujúca či je reťazec dátum ---- */
 			else 
 				break;
 	}
-	if ( *(c + i) == '\0' && i == 10 ) // Pokiaľ sme cyklom prešli až do ukončujúceho znaku v reťazci, reťazec je vo formáte pre dátum
+	if ( *(c + i) == '\0' && i == 10 ) // Pokial sme cyklom presli až do ukoncujuceho znaku v retazci, retazec je vo formate pre datum
 		return 1; 
-	else // reťazec nie je vo formáte pre dátum
+	else // retazec nie je vo formáte pre dátum
 		return 0; 
 }
 
-char *date(int d, int m, int y) {
+char *date(int d, int m, int y) { // mktime
 	struct tm date;
 	static char datebuff[10];
 
@@ -164,9 +164,9 @@ char *date(int d, int m, int y) {
 	}
 }
 
-int isprime(int n) {
+int isprime(int n) { // fukncia pre zistenie prvocisla
 	int i = 2;
-	while( n%i != 0 && i <= n )
+	while( n%i != 0 && i <= n ) // delenie dvoma, ziskavanie zvysku
 		i++;
 	if (i == n)
 		return 1;
