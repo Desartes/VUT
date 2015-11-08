@@ -1,10 +1,10 @@
-/* ----------------------------------
+/* -------------------------------------
  * @file_name: proj1.c    
- * @author: Filip Kolesár - xkoles06
- *			1BIT, VUT FIT
- * @date: 10/2015
- * @version: 1.0.0     
- -----------------------------------*/
+ * @author   : Filip Kolesar - xkoles06
+ *			   1BIT, VUT FIT
+ * @date     : 10/2015
+ * @version  : 1.0.0     
+ ---------------------------------------*/
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -37,15 +37,15 @@ int main(int argc, char *argv[]) /* ---------------- MAIN BODY ---------------- 
 		else 
 			if (isnum(&word[0])) {
 				if ( strlength(&word[0]) < 11 && atol(word) <= INT_MAX && isprime(atol(word)) )
-					printf("number: %s (prime)\n", word);
+					printf("number: %ld (prime)\n", atol(word));
 				else
-					printf("number: %s\n", word);
+					printf("number: %ld\n", atol(word));
 			}
 		else 
 			if (isdate(&word[0])) {
 				int day, month, year;
-			sscanf(word, "%4d-%2d-%2d",&year, &month, &day);
-			if ( (month <= 12) && (month >= 1) && (day <= 31) && (day >= 1) )
+				sscanf(word, "%4d-%2d-%2d",&year, &month, &day);
+			if ( (month <= 12) && (year >= 1901) && (month >= 1) && (day <= 31) && (day >= 1) )
 				printf("date: %.3s %s\n", date(day, month, year), word);
 			else
 				printf("word: %s\n", word);
@@ -53,9 +53,12 @@ int main(int argc, char *argv[]) /* ---------------- MAIN BODY ---------------- 
 		else
 			printf("word: %s\n", word);
 	}
-	if (!istext(&word[0]))
+	if (!istext(&word[0])) {
 		printf("The characters you\'ve entered are not printable.\n"
 			   "Exiting ..\n");
+		return 1;
+	}
+
 	//printf("%d\n", strlength(&word[0])); // debug
 	return 0; 
 }
@@ -154,8 +157,7 @@ char *date(int d, int m, int y) {
 	if (mktime(&date) == -1) {
 		printf("Making time using mktime() failed.\nExiting program ..\n");
 		exit(1);
-	}
-	else {
+	} else {
 		strftime(datebuff, sizeof(datebuff), "%A", &date);
 		// printf("%d / %d / %d\n", y,m,d); // debug
 		return datebuff;
