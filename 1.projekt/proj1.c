@@ -84,7 +84,7 @@ int ispalindrom(char *c) { /* ---- Funkcia zistujuca palindrom ---- */
 
 	int offset = 0; // Pomocna premenna
 	while( *(c + offset) == new[offset] ) { // Porovnavanie dvoch retazcov (po znakoch)
-		if ( *(c + offset) == '\0' || new[offset] == '\0' ) // Ak sme na konci niektorého z retazcov, vyskoč z cyklu
+		if ( *(c + offset) == '\0' || new[offset] == '\0' ) // Ak sme na konci niektoreho z retazcov, vyskoc z cyklu
 			break;
 		offset++; // Dalsi znak v retazci
 	}
@@ -95,10 +95,10 @@ int ispalindrom(char *c) { /* ---- Funkcia zistujuca palindrom ---- */
 	// printf("%s | %s\n", c, new); // Debug mode
 }
 
-int isnum(char *c) { /* ---- Funkcia zistujuca ci je retazec číslo ---- */
+int isnum(char *c) { /* ---- Funkcia zistujuca ci je retazec cislo ---- */
 	int i = 0;
 	
-	while( *(c + i) != '\0' ) { // Iteracia ktora prejde celym retazcom a vyhodnoti či je retazec cislo
+	while( *(c + i) != '\0' ) { // Iteracia ktora prejde celym retazcom a vyhodnoti ci je retazec cislo
 		if ( !(*(c + i) >= 48 && *(c + i) <= 57) )
 			break; // Ak znak v retazci nie je cislo, vyskoc z cyklu
 		else 
@@ -110,7 +110,7 @@ int isnum(char *c) { /* ---- Funkcia zistujuca ci je retazec číslo ---- */
 		return 0;
 }
 
-int istext(char *c) { /* ---- Funkcia zistujuca či je reťazec slozeny iba z "tisknutelnych" znakov ASCII tabulky ---- */
+int istext(char *c) { /* ---- Funkcia zistujuca ci je retazec zlozeny iba z "tisknutelnych" znakov ASCII tabulky ---- */
 	int i = 0;
 	
 	while( *(c + i) != '\0' ) { 
@@ -125,10 +125,10 @@ int istext(char *c) { /* ---- Funkcia zistujuca či je reťazec slozeny iba z "t
 		return 0;
 }
 
-int isdate(char *c) { /* ---- Funkcia zistujúca ci je retazec datum ---- */
+int isdate(char *c) { /* ---- Funkcia zistujuca ci je retazec datum ---- */
 	int i = 0;
 
-	while( *(c + i) != '\0' ) { // Iteracia ktora prejde celým reťazcom a vyhodnoti ci je retazec vo formate datumu DDDD-DD-DD
+	while( *(c + i) != '\0' ) { // Iteracia ktora prejde celym reťazcom a vyhodnoti ci je retazec vo formate datumu DDDD-DD-DD
 		if ( (*(c + i) >= 48 && *(c + i) <= 57) && (i != 4) && (i != 7) && (i < 10)) // D je cislo a zaroveň nie sme na indexe 4 ani 7
 			i++;
 		else 
@@ -137,9 +137,9 @@ int isdate(char *c) { /* ---- Funkcia zistujúca ci je retazec datum ---- */
 			else 
 				break;
 	}
-	if ( *(c + i) == '\0' && i == 10 ) // Pokial sme cyklom presli až do ukoncujuceho znaku v retazci, retazec je vo formate pre datum
+	if ( *(c + i) == '\0' && i == 10 ) // Pokial sme cyklom presli az do ukoncujuceho znaku v retazci, retazec je vo formate pre datum
 		return 1; 
-	else // retazec nie je vo formáte pre dátum
+	else // retazec nie je vo formate pre dátum
 		return 0; 
 }
 
