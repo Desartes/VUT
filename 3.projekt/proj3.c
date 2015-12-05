@@ -317,7 +317,6 @@ int load_clusters(char *filename, struct cluster_t **arr)
             clusters = malloc(count*sizeof(struct cluster_t)+sizeof(struct obj_t)*count); 
 
             for (int i = 0; i < count; i++) {
-                printf("%d\n", i);
                 struct cluster_t cluster;
                 fscanf(file, "%d %f %f", &object.id, &object.x, &object.y);
                 init_cluster(&cluster, CLUSTER_CHUNK);
@@ -364,13 +363,20 @@ int main(int argc, char *argv[])
     if (atoi(argv[2]) <= INT_MAX && atoi(argv[2]) > 0) {
         int clust = atoi(argv[2]);
         int s_count = count - clust;
-
-        for (int i = 0; i < s_count; ++i) {
-                find_neighbours(clusters, count,&ne1,&ne2);
-                merge_clusters(&clusters[ne1], &clusters[ne2]);
-                count = remove_cluster(clusters, count, ne2);
-            
+        if (clust == 1) {
+            while ( clusters[1].size != 0 ) {
+                merge_clusters(&clusters[0], &clusters[1]);
+                count = remove_cluster(clusters, count, 1);
+            }
+        } else {
+            for (int i = 0; i < s_count; ++i) {
+                    find_neighbours(clusters, count,&ne1,&ne2);
+                    merge_clusters(&clusters[ne1], &clusters[ne2]);
+                    count = remove_cluster(clusters, count, ne2);
+                
+            }            
         }
+
         print_clusters(clusters, count);
         while (count > 0)
             count = remove_cluster(clusters, count, (count -1));
