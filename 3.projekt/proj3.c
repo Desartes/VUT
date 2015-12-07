@@ -136,14 +136,14 @@ struct cluster_t *resize_cluster(struct cluster_t *c, int new_cap)
 void append_cluster(struct cluster_t *c, struct obj_t obj)
 {
     // TODO
-    c->size++;
-    if (c->size <= c->capacity) {
-        c->obj[c->size-1] = obj;
+
+    if (c->size < c->capacity) {
+        c->obj[c->size++] = obj;
     } else {
-        if (resize_cluster(c,c->capacity+1) != NULL) {
-            c->obj[c->size-1] = obj;
+        if (resize_cluster(c, c->capacity + 1) != NULL) {
+            c->obj[c->size++] = obj;
         } else {
-            printf("blyat");
+            puts("Fail.");
         }
     }
 }
@@ -306,35 +306,34 @@ int load_clusters(char *filename, struct cluster_t **arr)
     assert(arr != NULL);
 
     FILE *file;
-    struct cluster_t *clusters;
     struct obj_t object;
 
-    if ( file = fopen(filename, "r") ) {
+    if ( (file = fopen(filename, "r")) ) {
         char buffer[20];
         if ( fscanf(file, "%s", buffer) ) {
             int count;
             sscanf(buffer, "count=%d", &count);
-            clusters = malloc(count*sizeof(struct cluster_t)+sizeof(struct obj_t)*count); 
+            *arr = malloc(count*sizeof(struct cluster_t)); 
 
             for (int i = 0; i < count; i++) {
                 struct cluster_t cluster;
                 fscanf(file, "%d %f %f", &object.id, &object.x, &object.y);
                 init_cluster(&cluster, CLUSTER_CHUNK);
                 append_cluster(&cluster, object);
-                clusters[i] = cluster;
+                (*arr)[i] = cluster;
             }
-            *arr = &clusters[0];
             fclose(file);
             return count;
         } else {
-            puts("Bad format of data file.");
+            puts("Error: Bad format of data file.");
+            return -1;
         }
-        printf("Objects loaded succesfully.\n");
+        fclose(file);
         
     } else {
         puts("Error: Couldn't load file.");
+        return -2;
     }
-
 }
 
 /*
@@ -353,35 +352,45 @@ void print_clusters(struct cluster_t *carr, int narr)
 }
 int main(int argc, char *argv[])
 {
+    (void) argc;
     struct cluster_t *clusters;
     int count, ne1=0,ne2=0;
     count = load_clusters(argv[1], &clusters);
     if (!argv[2]) {
-        print_clusters(clusters, count);
-        return 0;
-    }
-    if (atoi(argv[2]) <= INT_MAX && atoi(argv[2]) > 0) {
-        int clust = atoi(argv[2]);
-        int s_count = count - clust;
-        if (clust == 1) {
-            while ( clusters[1].size != 0 ) {
-                merge_clusters(&clusters[0], &clusters[1]);
-                count = remove_cluster(clusters, count, 1);
+        while ( clusters[1].size != 0 ) {
+            merge_clusters(&clusters[0], &clusters[1]);
+            count = remove_cluster(clusters, count, 1);
+        }
+    } else {
+        if (atoll(argv[2]) <= INT_MAX && atoll(argv[2]) > 0) {
+            int clust = atoi(argv[2]);
+            int s_count = count - clust;
+            if (clust == 1) {
+                while ( clusters[1].size != 0 ) {
+                    merge_clusters(&clusters[0], &clusters[1]);
+                    count = remove_cluster(clusters, count, 1);
+                }
+            } else {
+                for (int i = 0; i < s_count; ++i) {
+                        find_neighbours(clusters, count,&ne1,&ne2);
+                        merge_clusters(&clusters[ne1], &clusters[ne2]);
+                        count = remove_cluster(clusters, count, ne2);
+                    
+                }            
             }
         } else {
-            for (int i = 0; i < s_count; ++i) {
-                    find_neighbours(clusters, count,&ne1,&ne2);
-                    merge_clusters(&clusters[ne1], &clusters[ne2]);
-                    count = remove_cluster(clusters, count, ne2);
-                
-            }            
+            if ( !atoll(argv[2]) ) {
+                puts("Error: Third argument has to be number.");
+            } else {
+                puts("Error: Number in third argument is out of range.");
+            }
+            return 1;
         }
-
-        print_clusters(clusters, count);
-        while (count > 0)
-            count = remove_cluster(clusters, count, (count -1));
-        free(clusters);
     }
+    print_clusters(clusters, count);
+    while (count > 0)
+        count = remove_cluster(clusters, count, (count -1));
+    free(clusters);
     return 0;
 
 }
